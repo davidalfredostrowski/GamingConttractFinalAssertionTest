@@ -126,29 +126,6 @@ contract Gaming {
         }
     }
 
-   function winOrLoseThree(uint display, bool guess) external payable returns (bool, uint) {
-        /* Use true for a higher guess, false for a lower guess */
-        require(online == true, "The game is not online");
-        require(msg.sender.balance > msg.value, "Insufficient funds");
-        uint mysteryNumber_ = myMysteryNumber;
-        bool isWinner = determineWinner(10,1, guess);
-        Player storage player = players[msg.sender];
-        if (isWinner == true) {
-            /* Player won */
-            player.wins += 1;
-            wins += 1;
-            payable(msg.sender).transfer(msg.value * 2);
-            emit RoundComplete(msg.value, display, mysteryNumber_, guess, "won");
-            return (true, mysteryNumber_);
-        } else if (isWinner == false) {
-            /* Player lost */
-            player.losses += 1;
-            losses += 1;
-            emit RoundComplete(msg.value, display, mysteryNumber_, guess, "lost");
-            return (false, mysteryNumber_);
-        }
-    }
-
 
 
 
