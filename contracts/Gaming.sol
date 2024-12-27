@@ -7,7 +7,7 @@ contract Gaming {
 
     uint public wins;    /* public didnt allow me any advantage */
     uint public losses;
-    // unit public mysteryniumber
+    uint public myMysteryNumber; /* preestablish mystery number for testing */
 
 
     struct Player {
@@ -43,9 +43,19 @@ contract Gaming {
     event GameFunded(address funder, uint amount);
 
     function mysteryNumber() private view returns (uint) {
-        //uint randomNumber = uint(blockhash(block.number-1))%10 + 1;
-        uint randomNumber = 5;
+        uint randomNumber = uint(blockhash(block.number-1))%10 + 1;
+        //uint randomNumber = 5;
 	return randomNumber;
+    }
+
+    function mysteryNumberTest() public view returns (uint) {
+        uint randomNumber = uint(blockhash(block.number-1))%10 + 1;
+        return randomNumber;
+    }
+
+
+    function setMysteryNumber(uint mysteryNumber) public {
+	    myMysteryNumber = mysteryNumber;
     }
 
 // true == my number ( display is > myster number )
@@ -55,14 +65,14 @@ contract Gaming {
             if (myNumber > mysteryNumber){
                 return true;
             }
-            if (myNumber < mysteryNumber) {
+            if (myNumber <= mysteryNumber) {
                 return false;
             }
         } else if (guess == false) {
             if (mysteryNumber > myNumber) {
                 return true;
             }
-            if (mysteryNumber < myNumber) {
+            if (mysteryNumber <= myNumber) {
                 return false;
             }
         }
@@ -92,6 +102,55 @@ contract Gaming {
             return (false, mysteryNumber_);
         }
     }
+
+   function winOrLoseTest(uint display, bool guess) external payable returns (bool, uint) {
+        /* Use true for a higher guess, false for a lower guess */
+        require(online == true, "The game is not online");
+        require(msg.sender.balance > msg.value, "Insufficient funds");
+        uint mysteryNumber_ = myMysteryNumber;
+        bool isWinner = determineWinner(mysteryNumber_, display, guess);
+        Player storage player = players[msg.sender];
+        if (isWinner == true) {
+            /* Player won */
+            player.wins += 1;
+            wins += 1;
+            payable(msg.sender).transfer(msg.value * 2);
+            emit RoundComplete(msg.value, display, mysteryNumber_, guess, "won");
+            return (true, mysteryNumber_);
+        } else if (isWinner == false) {
+            /* Player lost */
+            player.losses += 1;
+            losses += 1;
+            emit RoundComplete(msg.value, display, mysteryNumber_, guess, "lost");
+            return (false, mysteryNumber_);
+        }
+    }
+
+   function winOrLoseThree(uint display, bool guess) external payable returns (bool, uint) {
+        /* Use true for a higher guess, false for a lower guess */
+        require(online == true, "The game is not online");
+        require(msg.sender.balance > msg.value, "Insufficient funds");
+        uint mysteryNumber_ = myMysteryNumber;
+        bool isWinner = determineWinner(10,1, guess);
+        Player storage player = players[msg.sender];
+        if (isWinner == true) {
+            /* Player won */
+            player.wins += 1;
+            wins += 1;
+            payable(msg.sender).transfer(msg.value * 2);
+            emit RoundComplete(msg.value, display, mysteryNumber_, guess, "won");
+            return (true, mysteryNumber_);
+        } else if (isWinner == false) {
+            /* Player lost */
+            player.losses += 1;
+            losses += 1;
+            emit RoundComplete(msg.value, display, mysteryNumber_, guess, "lost");
+            return (false, mysteryNumber_);
+        }
+    }
+
+
+
 
     function withdrawFunds() public isOwner {
         payable(msg.sender).transfer(address(this).balance);
