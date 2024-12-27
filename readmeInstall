@@ -23,3 +23,10 @@ npm start
 npx hardhat init
 
 
+cd contract
+vi gaming.sol
+
+
+
+
+
