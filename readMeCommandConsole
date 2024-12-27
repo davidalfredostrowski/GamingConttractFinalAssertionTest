@@ -7,52 +7,50 @@ undefined
 undefined
 >  const cd = await contract.deploy()
 undefined
-> cd.fundGame({value: ethers.parseEther("100.0")})
-Promise {
-  <pending>,
-  [Symbol(async_id_symbol)]: 2888,
-  [Symbol(trigger_async_id_symbol)]: 14
-}
+
+> await cd.determineWinner(1,2,true)
+
+true
+> await cd.determineWinner(2,1,true)
+false
+> await cd.determineWinner(1,2,false)
+false
+> await cd.determineWinner(1,2,true)
+true
+
+
+
+> await cd.fundGame({value: ethers.parseEther("100.0")})
+...
+
+true
+> await cd.determineWinner(2,1,true)
+false
+> await cd.determineWinner(1,2,false)
+false
+> await cd.determineWinner(1,2,true)
+true
+
+
 > cd.setMysteryNumber(2)
-Promise {
-  <pending>,
-  [Symbol(async_id_symbol)]: 3134,
-  [Symbol(trigger_async_id_symbol)]: 14
-}
+Promise 
 >  await cd.winOrLoseTest(1, true, {from: signers[0] ,value: ethers.parseEther("1.0") })
-ContractTransactionResponse {
-  provider: HardhatEthersProvider {
-    _hardhatProvider: LazyInitializationProviderAdapter {
-      _providerFactory: [AsyncFunction (anonymous)],
-      _emitter: [EventEmitter],
-      _initializingPromise: [Promise],
-      provider: [BackwardsCompatibilityProviderAdapter]
-    },
-    _networkName: 'localhost',
-    _blockListeners: [],
-    _transactionHashListeners: Map(0) {},
-    _eventListeners: []
-  },
-  blockNumber: 4,
-  blockHash: '0x7f431ab5265b0ed10dd5b8296d412113acc55d67a68d04bbcef0c0b9d9e9fa1b',
-  index: undefined,
-  hash: '0xe1a06ad6ec47ce1ba798ac20452f7c329b702ad4587ade46da1cbca16fa556ac',
-  type: 2,
-  to: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-  from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-  nonce: 3,
-  gasLimit: 30000000n,
-  gasPrice: 751077427n,
-  maxPriorityFeePerGas: 180077547n,
-  maxFeePerGas: 751077427n,
-  maxFeePerBlobGas: null,
-  data: '0x5d64446200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001',
-  value: 1000000000000000000n,
-  chainId: 31337n,
-  signature: Signature { r: "0x6b9d7df2135f15abbfc9d01fc2ee0f881b000040f4c7f7d8e59d83ab5f587f4f", s: "0x3a528b979e7515d1f7f153ccf05f8c96e63f1c942e8ac2f4435a3acd74cffe70", yParity: 1, networkV: null },
-  accessList: [],
-  blobVersionedHashes: null
-}
+
+
+> await cd.players(signers[0])
+Result(2) [ 0n, 1n ]
+> var p = await cd.players(signers[0])
+undefined
+> p.losses
+1n
+> p.wins
+0n
+> await cd.setMysteryNumber(6)
+
+> await cd.players(signers[0])
+Result(2) [ 1n, 1n ]
+
+
 > await cd.players(signers[0])
 Result(2) [ 0n, 1n ]
 > cd.setMysteryNumber(10)
