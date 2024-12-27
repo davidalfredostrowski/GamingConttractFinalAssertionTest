@@ -33,4 +33,25 @@ npx hardhat node --hostname localhost    # make sure to run as localhost vs the 
 npx hardhat console --network localhost
 
 
+npx hardhat test
+
+
+
+  test game scenario
+preBalance 9899997931687874811350n
+postBalance 9900997796545880285669n
+    ✔ test my win loss function for a 'win'  (670ms)
+preBalance 9800996039087894611182n
+postBalance 9798995931857408876964n
+    ✔ test my win loss function for a 'loss'
+preBalance 9698994385029689175160n
+postBalance 9703994279389632177972n
+    ✔ test my win loss function for a 'win'
+    ✔ test my win loss function for a 'win'
+
+
+  4 passing (742ms)
+
+
+
 
